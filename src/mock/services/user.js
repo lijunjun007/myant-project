@@ -32,7 +32,91 @@ const info = (options) => {
     'permissions': [{
       'roleId': 'admin',
       'permissionId': 'test',
-      'permissionName': '仪表盘',
+      'permissionName': '测试管理',
+      'actions': '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"query","defaultCheck":false,"describe":"查询"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"delete","defaultCheck":false,"describe":"删除"}]',
+      'actionEntitySet': [{
+        'action': 'add',
+        'describe': '新增',
+        'defaultCheck': false
+      }, {
+        'action': 'query',
+        'describe': '查询',
+        'defaultCheck': false
+      }, {
+        'action': 'get',
+        'describe': '详情',
+        'defaultCheck': false
+      }, {
+        'action': 'update',
+        'describe': '修改',
+        'defaultCheck': false
+      }, {
+        'action': 'delete',
+        'describe': '删除',
+        'defaultCheck': false
+      }],
+      'actionList': null,
+      'dataAccess': null
+    }, {
+      'roleId': 'admin',
+      'permissionId': 'testStatistics',
+      'permissionName': '测评统计',
+      'actions': '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"query","defaultCheck":false,"describe":"查询"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"delete","defaultCheck":false,"describe":"删除"}]',
+      'actionEntitySet': [{
+        'action': 'add',
+        'describe': '新增',
+        'defaultCheck': false
+      }, {
+        'action': 'query',
+        'describe': '查询',
+        'defaultCheck': false
+      }, {
+        'action': 'get',
+        'describe': '详情',
+        'defaultCheck': false
+      }, {
+        'action': 'update',
+        'describe': '修改',
+        'defaultCheck': false
+      }, {
+        'action': 'delete',
+        'describe': '删除',
+        'defaultCheck': false
+      }],
+      'actionList': null,
+      'dataAccess': null
+    }, {
+      'roleId': 'admin',
+      'permissionId': 'personalInformation',
+      'permissionName': '个人信息',
+      'actions': '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"query","defaultCheck":false,"describe":"查询"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"delete","defaultCheck":false,"describe":"删除"}]',
+      'actionEntitySet': [{
+        'action': 'add',
+        'describe': '新增',
+        'defaultCheck': false
+      }, {
+        'action': 'query',
+        'describe': '查询',
+        'defaultCheck': false
+      }, {
+        'action': 'get',
+        'describe': '详情',
+        'defaultCheck': false
+      }, {
+        'action': 'update',
+        'describe': '修改',
+        'defaultCheck': false
+      }, {
+        'action': 'delete',
+        'describe': '删除',
+        'defaultCheck': false
+      }],
+      'actionList': null,
+      'dataAccess': null
+    }, {
+      'roleId': 'admin',
+      'permissionId': 'systemManagement',
+      'permissionName': '系统管理',
       'actions': '[{"action":"add","defaultCheck":false,"describe":"新增"},{"action":"query","defaultCheck":false,"describe":"查询"},{"action":"get","defaultCheck":false,"describe":"详情"},{"action":"update","defaultCheck":false,"describe":"修改"},{"action":"delete","defaultCheck":false,"describe":"删除"}]',
       'actionEntitySet': [{
         'action': 'add',

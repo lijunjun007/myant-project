@@ -324,6 +324,7 @@ dv.transform({
   as: 'percent'
 })
 const pieData = dv.rows
+console.log(pieData)
 
 export default {
   name: 'Analysis',
@@ -358,7 +359,7 @@ export default {
       pieData,
       sourceData,
       pieStyle: {
-        stroke: '#fff',
+        stroke: '#000',
         lineWidth: 1
       }
     }

@@ -28,7 +28,7 @@ export const asyncRouterMap = [
             path: '/testEnter',
             name: 'testEnter',
             component: () => import('@/views/testManage/testEnter'),
-            meta: { title: '测试入口', keepAlive: false, permission: [ 'test' ] }
+            meta: { title: '测试入口', keepAlive: false, permission: ['test'] }
           },
           {
             path: '/testPerson',
@@ -41,6 +41,101 @@ export const asyncRouterMap = [
             name: 'testUndone',
             component: () => import('@/views/testManage/testUndone'),
             meta: { title: '测试结果(未完成)', keepAlive: false, permission: [ 'test' ] }
+          },
+          {
+            path: '/testPrintable',
+            name: 'testPrintable',
+            component: () => import('@/views/testManage/testPrintable'),
+            meta: { title: '测试结果(可打印)', keepAlive: false, permission: [ 'test' ] }
+          },
+          {
+            path: '/testAudit',
+            name: 'testAudit',
+            component: () => import('@/views/testManage/testAudit'),
+            meta: { title: '测试结果(待审核)', keepAlive: false, permission: [ 'test' ] }
+          },
+          {
+            path: '/testCode',
+            name: 'testCode',
+            component: () => import('@/views/testManage/testCode'),
+            meta: { title: '测试码', keepAlive: false, permission: [ 'test' ] }
+          }
+        ]
+      },
+      // 测评统计
+      {
+        path: '/testStatistics',
+        name: 'testStatistics',
+        redirect: '/personnel',
+        component: RouteView,
+        meta: { title: '测评统计', keepAlive: true, icon: bxAnaalyse, permission: [ 'testStatistics' ] },
+        children: [
+          {
+            path: '/personnel',
+            name: 'personnel',
+            component: () => import('@/views/evaluationStatistics/personnel'),
+            meta: { title: '人员统计', keepAlive: false, permission: [ 'testStatistics' ] }
+          },
+          // {
+          //   path: '/bigData',
+          //   name: 'bigData',
+          //   component: () => import('@/views/evaluationStatistics/bigData'),
+          //   meta: { title: '大数据看板', keepAlive: false, permission: [ 'testStatistics' ] }
+          // },
+          {
+            path: 'https://www.baidu.com/',
+            name: 'bigData',
+            meta: { title: '大数据看板', target: '_blank' }
+          },
+          {
+            path: '/scaleTable',
+            name: 'scaleTable',
+            component: () => import('@/views/evaluationStatistics/scaleTable'),
+            meta: { title: '量表统计', keepAlive: false, permission: [ 'testStatistics' ] }
+          }
+        ]
+      },
+      // 个人信息
+      {
+        path: '/personalInformation',
+        name: 'personalInformation',
+        redirect: '/baseInformation',
+        component: RouteView,
+        meta: { title: '个人信息', keepAlive: true, icon: bxAnaalyse, permission: [ 'personalInformation' ] },
+        children: [
+          {
+            path: '/baseInformation',
+            name: 'baseInformation',
+            component: () => import('@/views/personalInformation/baseInformation'),
+            meta: { title: '基本信息', keepAlive: false, permission: [ 'personalInformation' ] }
+          },
+          {
+            path: '/changePassword',
+            name: 'changePassword',
+            component: () => import('@/views/personalInformation/changePassword'),
+            meta: { title: '修改密码', keepAlive: false, permission: [ 'personalInformation' ] }
+          },
+          {
+            path: '/codeQuery',
+            name: 'codeQuery',
+            component: () => import('@/views/personalInformation/codeQuery'),
+            meta: { title: '验证码查询', keepAlive: false, permission: [ 'personalInformation' ] }
+          }
+        ]
+      },
+      // 系统管理
+      {
+        path: '/systemManagement',
+        name: 'systemManagement',
+        redirect: '/employeeManagement',
+        component: RouteView,
+        meta: { title: '系统管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'systemManagement' ] },
+        children: [
+          {
+            path: '/employeeManagement',
+            name: 'employeeManagement',
+            component: () => import('@/views/systemManagement/employeeManagement'),
+            meta: { title: '员工管理', keepAlive: false, permission: [ 'systemManagement' ] }
           }
         ]
       },

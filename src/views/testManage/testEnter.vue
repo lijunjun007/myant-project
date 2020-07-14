@@ -1,184 +1,206 @@
 <template>
-  <page-header-wrapper>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
-                <a-input v-model="queryParam.id" placeholder=""/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
+  <div>
+    <page-header-wrapper :title="aditShow?'方案编辑':'测试入口'">
+      <a-card :bordered="false">
+        <div class="table-page-search-wrapper">
+          <a-form layout="inline" :style="{'padding-bottom':'10px'}">
+            <a-row :gutter="[16,16]">
+              <a-col :sm="{ span:24}" :md="{ span:6,offset:12}">
+                <a-select default-value="0" style="width: 100%" @change="handleChange">
+                  <a-select-option value="0">
+                    全部
+                  </a-select-option>
+                  <a-select-option value="1">
+                    测试商户(某某某)
+                  </a-select-option>
                 </a-select>
-              </a-form-item>
-            </a-col>
-            <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
-                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
-                </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
+              <a-col :sm="{ span:24}" :md="{ span:6}">
+                <a-input-search v-model="queryParam.str" placeholder="输入关键字" @search="onSearch">
+                  <a-button type="primary" icon="search" slot="enterButton">
+                    搜索
+                  </a-button>
+                </a-input-search>
               </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
+            </a-row>
+          </a-form>
+        </div>
 
-      <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-          <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
-            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            批量操作 <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
-      </div>
+        <s-table
+          ref="table"
+          size="default"
+          rowKey="id"
+          :columns="columns"
+          :data="loadData"
+          :alert="true"
+          :rowSelection="rowSelection"
+          showPagination="auto"
+        >
+          <span slot="name" slot-scope="text,record" :title="text">
+            <span class="set-name-enter" @click="openAditTest(record)">[设置]</span>{{ text }}
+          </span>
+          <span slot="shenheRenStr" slot-scope="text" :title="text">
+            {{ text }}
+          </span>
+          <span slot="unclose" slot-scope="text">
+            <a-button type="link" icon="eye">{{ text }}</a-button>
+          </span>
+          <span slot="close" style="cursor:pointer" slot-scope="text">
+            <a-button type="link" icon="eye">{{ text }}</a-button>
+          </span>
+          <span slot="action" slot-scope="record">
+            <a-button-group size="small" >
+              <a-button type="primary" color="#375D81" icon="tool" @click="ceshi(record)">测试</a-button>
+              <a-button style="background-color:#5d0" color="#215D81" icon="snippets" @click="yulan(record)">预览</a-button>
+              <a-button style="background-color:#0dd" color="#375D81" icon="form" @click="jieguo(record)">结果</a-button>
+            </a-button-group>
+          </span>
+        </s-table>
+        <create-form
+          ref="createModal"
+          :visible="visible"
+          :loading="confirmLoading"
+          :model="mdl"
+          @cancel="handleCancel"
+          @ok="handleOk"
+        />
+        <!-- <step-by-step-modal ref="modal" @ok="handleOk"/> -->
+        <!--  -->
+        <div v-show="aditShow" class="full-page" style="margin:0" title="方案编辑">
+          <a-form-model :model="singledata" layout="vertical" :label-col="{sapn:8,offset:4}" :wrapper-col="{sapn:12}">
+            <a-form-model-item label="名称">
+              <a-input v-model="singledata.name" />
+            </a-form-model-item>
+            <a-form-model-item label="是否审核">
+              <a-select v-model="singledata.isShenHe">
+                <a-select-option key="true">
+                  审核
+                </a-select-option>
+                <a-select-option key="false">
+                  不审核
+                </a-select-option>
+              </a-select>
 
-      <s-table
-        ref="table"
-        size="default"
-        rowKey="key"
-        :columns="columns"
-        :data="loadData"
-        :alert="true"
-        :rowSelection="rowSelection"
-        showPagination="auto"
-      >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
-        <span slot="description" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-        </span>
+            </a-form-model-item>
+            <a-form-model-item v-show="singledata.isShenHe=='true'" label="是否审核">
+              <a-select v-model="singledata.ShenHeType">
+                <a-select-option key="auto">
+                  自动审核
+                </a-select-option>
+                <a-select-option key="noauto">
+                  不自动审核
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+            <a-form-model-item label="审核人列表">
+              <a-select
+                mode="multiple"
+                placeholder="Please select"
+                :default-value="singledata.shenheRen"
+                @change="shenherenChange"
+              >
+                <a-select-option v-for="(item,i) in singledata.shenheRen" :key="i">
+                  {{ item }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
 
-        <span slot="action" slot-scope="text, record">
-          <template>
-            <a @click="handleEdit(record)">配置</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
-          </template>
-        </span>
-      </s-table>
+            <a-form-model-item label="显示结果">
+              <a-select>
+                <a-select-option key="auto">
+                  显示
+                </a-select-option>
+                <a-select-option key="noauto">
+                  不显示
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
 
-      <create-form
-        ref="createModal"
-        :visible="visible"
-        :loading="confirmLoading"
-        :model="mdl"
-        @cancel="handleCancel"
-        @ok="handleOk"
-      />
-      <!-- <step-by-step-modal ref="modal" @ok="handleOk"/> -->
-    </a-card>
-  </page-header-wrapper>
+            <a-form-model-item label="结束语">
+              <a-input placeholder="输入结束语" />
+            </a-form-model-item>
+
+            <a-form-model-item label="排序索引">
+              <a-input type="Number"/>
+            </a-form-model-item>
+
+            <a-form-model-item label="复测周期">
+              <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 天
+              <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 小时
+              <a-checkbox @change="(e)=>{cycleLimit=e.target.checked}">不限制</a-checkbox>
+            </a-form-model-item>
+
+          </a-form-model>
+
+          <a-button @click="()=>{aditShow=false}">关闭</a-button>
+        </div>
+      </a-card>
+    </page-header-wrapper>
+  </div>
 </template>
 
 <script>
-import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
-
+import api from '@/api/manage'
 // import StepByStepModal from '../list/modules/StepByStepModal'
 import CreateForm from '../list/modules/CreateForm'
 
 const columns = [
   {
-    title: '编号',
-    dataIndex: 'no'
+    title: '序号',
+    dataIndex: 'id',
+    width: '80px',
+    sorter: (a, b) => a.id - b.id
   },
   {
     title: '测评机构',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    dataIndex: 'jigou',
+    filters: [
+            { text: '肃桥科技', value: '肃桥科技' },
+            { text: '光菱科技', value: '光菱科技' }
+          ],
+    onFilter: (value, record) => record.jigou.includes(value)
   },
   {
     title: '方案名称',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
+    dataIndex: 'name',
+    ellipsis: true,
+    scopedSlots: { customRender: 'name' }
   },
   {
     title: '方案备注',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    dataIndex: 'descri'
   },
   {
     title: '收费',
-    dataIndex: 'updatedAt',
-    sorter: true
+    dataIndex: 'zifei',
+    sorter: (a, b) => a.zifei - b.zifei
+  }, {
+    title: '审核人',
+    dataIndex: 'shenheRenStr',
+    ellipsis: true,
+    scopedSlots: { customRender: 'shenheRenStr' }
+  },
+  {
+    title: '未完测评',
+    dataIndex: 'unclose',
+    needTotal: true,
+    scopedSlots: { customRender: 'unclose' }
+  },
+  {
+    title: '完成测评',
+    dataIndex: 'close',
+    needTotal: true,
+    scopedSlots: { customRender: 'close' }
+
   },
   {
     title: '操作',
     dataIndex: 'action',
-    width: '150px',
+    width: '250px',
     scopedSlots: { customRender: 'action' }
   }
 ]
-
-const statusMap = {
-  0: {
-    status: 'default',
-    text: '关闭'
-  },
-  1: {
-    status: 'processing',
-    text: '运行中'
-  },
-  2: {
-    status: 'success',
-    text: '已上线'
-  },
-  3: {
-    status: 'error',
-    text: '异常'
-  }
-}
 
 export default {
   name: 'TableList',
@@ -188,6 +210,8 @@ export default {
     CreateForm
     // StepByStepModal
   },
+  mounted () {
+  },
   data () {
     this.columns = columns
     return {
@@ -195,33 +219,26 @@ export default {
       visible: false,
       confirmLoading: false,
       mdl: null,
-      // 高级搜索 展开/关闭
-      advanced: false,
       // 查询参数
       queryParam: {},
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
+        return this.$http(api.getceshitaocan, 'get', requestParameters)
           .then(res => {
+            for (let i = 0; i < res.result.data.length; i++) {
+              res.result.data[i].shenheRenStr = this.arrayToStr(res.result.data[i].shenheRen)
+            }
             return res.result
           })
       },
       selectedRowKeys: [],
-      selectedRows: []
+      selectedRows: [],
+      aditShow: false,
+      singledata: {},
+      cycleLimit: true
     }
-  },
-  filters: {
-    statusFilter (type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter (type) {
-      return statusMap[type].status
-    }
-  },
-  created () {
-    getRoleList({ t: new Date() })
   },
   computed: {
     rowSelection () {
@@ -301,14 +318,40 @@ export default {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
+    handleChange () {},
+    onSearch () {
+      this.$refs.table.refresh(true)
     },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
+    openAditTest (record) {
+      this.aditShow = true
+      this.singledata = record
+      //
+      this.singledata.isShenHe = 'true'
+      this.singledata.ShenHeType = 'auto'
+    },
+    strToArray (str) {
+      str = str.trim()
+      return str.split(',')
+    },
+    arrayToStr (array) {
+      return array.join(',')
+    },
+    shenherenChange (value) {
+      console.log(`Selected: ${value}`)
     }
   }
 }
 </script>
+<style  scoped>
+.set-name-enter{
+  color: #40A9FF;
+  cursor: pointer;
+}
+.ant-form-item{
+  margin-bottom: 0;
+}
+.inline-input{
+  display: inline-block;
+  width: 100px;
+}
+</style>

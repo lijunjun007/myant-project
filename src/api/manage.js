@@ -6,7 +6,10 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  //
+  getceshitaocan: '/getceshitaocan'
+
 }
 
 export default api
