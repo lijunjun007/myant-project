@@ -8,7 +8,12 @@ const RouteView = {
 }
 
 export const asyncRouterMap = [
-
+  {
+            path: '/tinymce',
+            name: 'tinymce',
+            component: () => import('@/views/demo/tinymce'),
+            meta: { title: 'tinymce' }
+  },
   {
     path: '/',
     name: 'index',

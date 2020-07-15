@@ -30,18 +30,18 @@
         </a-tab-pane>
         <template slot="tabBarExtraContent">
           <div>
-            <a-select :default-value="provinceData[0]" style="width: 120px" @change="handleProvinceChange">
+            <a-select :default-value="provinceData[0]" v-model="city1" style="width: 120px" @change="handleProvinceChange">
               <a-select-option v-for="province in provinceData" :key="province">
                 {{ province }}
               </a-select-option>
             </a-select>
-            <a-select v-model="secondCity" style="width: 120px">
-              <a-select-option v-for="city in cities" :key="city">
+            <a-select v-model="city2" style="width: 120px">
+              <a-select-option v-for="city in cityData" :key="city">
                 {{ city }}
               </a-select-option>
             </a-select>
-            <a-select v-show="tabChangeboo" v-model="secondCity" style="width: 120px">
-              <a-select-option v-for="city in cities" :key="city">
+            <a-select v-show="tabChangeboo" v-model="city3" style="width: 120px">
+              <a-select-option v-for="city in qu" :key="city">
                 {{ city }}
               </a-select-option>
             </a-select>
@@ -60,11 +60,9 @@
 
 <script>
 import { STable } from '@/components'
-const provinceData = ['Zhejiang', 'Jiangsu']
-const cityData = {
-  Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
-  Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang']
-}
+const provinceData = ['全部测评机构', '测试商户1', '测试商户2']
+const cityData = ['全部测评方案', '测评方案1', '测评方案2']
+const qu = ['全部量表', '量表1', '量表2']
 export default {
 	created () {
 		},
@@ -76,8 +74,9 @@ export default {
 		// 级联下拉选择框
 		provinceData,
 		cityData,
-		cities: cityData[provinceData[0]],
-		secondCity: cityData[provinceData[0]][0],
+		city1: provinceData[0],
+		city2: cityData[0],
+		city3: qu[0],
 		tabChangeboo: true,
 		columns1: [
 					{

@@ -56,83 +56,77 @@
             </a-button-group>
           </span>
         </s-table>
-        <create-form
-          ref="createModal"
-          :visible="visible"
-          :loading="confirmLoading"
-          :model="mdl"
-          @cancel="handleCancel"
-          @ok="handleOk"
-        />
-        <!-- <step-by-step-modal ref="modal" @ok="handleOk"/> -->
-        <!--  -->
         <div v-show="aditShow" class="full-page" style="margin:0" title="方案编辑">
-          <a-form-model :model="singledata" layout="vertical" :label-col="{sapn:8,offset:4}" :wrapper-col="{sapn:12}">
-            <a-form-model-item label="名称">
-              <a-input v-model="singledata.name" />
-            </a-form-model-item>
-            <a-form-model-item label="是否审核">
-              <a-select v-model="singledata.isShenHe">
-                <a-select-option key="true">
-                  审核
-                </a-select-option>
-                <a-select-option key="false">
-                  不审核
-                </a-select-option>
-              </a-select>
+          <div style="margin:20px auto;width:80%">
+            <a-form-model :model="singledata" layout="vertical" :label-col="{sapn:8,offset:4}" :wrapper-col="{sapn:12}">
+              <a-form-model-item label="名称">
+                <a-input v-model="singledata.name" />
+              </a-form-model-item>
+              <a-form-model-item label="是否审核">
+                <a-select v-model="singledata.isShenHe">
+                  <a-select-option key="true">
+                    审核
+                  </a-select-option>
+                  <a-select-option key="false">
+                    不审核
+                  </a-select-option>
+                </a-select>
 
-            </a-form-model-item>
-            <a-form-model-item v-show="singledata.isShenHe=='true'" label="是否审核">
-              <a-select v-model="singledata.ShenHeType">
-                <a-select-option key="auto">
-                  自动审核
-                </a-select-option>
-                <a-select-option key="noauto">
-                  不自动审核
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item label="审核人列表">
-              <a-select
-                mode="multiple"
-                placeholder="Please select"
-                :default-value="singledata.shenheRen"
-                @change="shenherenChange"
-              >
-                <a-select-option v-for="(item,i) in singledata.shenheRen" :key="i">
-                  {{ item }}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
+              </a-form-model-item>
+              <a-form-model-item v-show="singledata.isShenHe=='true'" label="是否审核">
+                <a-select v-model="singledata.ShenHeType">
+                  <a-select-option key="auto">
+                    自动审核
+                  </a-select-option>
+                  <a-select-option key="noauto">
+                    不自动审核
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+              <a-form-model-item label="审核人列表">
+                <a-select
+                  mode="multiple"
+                  placeholder="Please select"
+                  :default-value="singledata.shenheRen"
+                  @change="shenherenChange"
+                >
+                  <a-select-option v-for="(item,i) in singledata.shenheRen" :key="i">
+                    {{ item }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
 
-            <a-form-model-item label="显示结果">
-              <a-select>
-                <a-select-option key="auto">
-                  显示
-                </a-select-option>
-                <a-select-option key="noauto">
-                  不显示
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
+              <a-form-model-item label="显示结果">
+                <a-select>
+                  <a-select-option key="auto">
+                    显示
+                  </a-select-option>
+                  <a-select-option key="noauto">
+                    不显示
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
 
-            <a-form-model-item label="结束语">
-              <a-input placeholder="输入结束语" />
-            </a-form-model-item>
+              <a-form-model-item label="结束语">
+                <a-input placeholder="输入结束语" />
+              </a-form-model-item>
 
-            <a-form-model-item label="排序索引">
-              <a-input type="Number"/>
-            </a-form-model-item>
+              <a-form-model-item label="排序索引">
+                <a-input type="Number"/>
+              </a-form-model-item>
 
-            <a-form-model-item label="复测周期">
-              <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 天
-              <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 小时
-              <a-checkbox @change="(e)=>{cycleLimit=e.target.checked}">不限制</a-checkbox>
-            </a-form-model-item>
-
-          </a-form-model>
-
-          <a-button @click="()=>{aditShow=false}">关闭</a-button>
+              <a-form-model-item label="复测周期">
+                <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 天
+                <a-input :disabled="cycleLimit" class="inline-input" type="Number"/> 小时
+                <a-checkbox @change="(e)=>{cycleLimit=e.target.checked}">不限制</a-checkbox>
+              </a-form-model-item>
+              <a-form-model-item label="知情书">
+                <editor :init="init" class="ceshibianji"></editor>
+              </a-form-model-item>
+            </a-form-model>
+            <a-button @click="()=>{aditShow=false}">确认</a-button>
+            <a-button @click="()=>{aditShow=false}">关闭</a-button>
+          </div>
         </div>
       </a-card>
     </page-header-wrapper>
@@ -140,10 +134,11 @@
 </template>
 
 <script>
-import { STable, Ellipsis } from '@/components'
+import { STable } from '@/components'
 import api from '@/api/manage'
 // import StepByStepModal from '../list/modules/StepByStepModal'
-import CreateForm from '../list/modules/CreateForm'
+
+import Editor from '@tinymce/tinymce-vue'
 
 const columns = [
   {
@@ -206,8 +201,7 @@ export default {
   name: 'TableList',
   components: {
     STable,
-    Ellipsis,
-    CreateForm
+    Editor
     // StepByStepModal
   },
   mounted () {
@@ -237,7 +231,21 @@ export default {
       selectedRows: [],
       aditShow: false,
       singledata: {},
-      cycleLimit: true
+      cycleLimit: true,
+      init: {
+        // 组件
+        plugins:
+          ' lists image colorpicker textcolor wordcount contextmenu autoresize',
+        // 工具栏
+        toolbar:
+          'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent  | undo redo | link unlink image  | removeformat ',
+        branding: false,
+        min_height: 300,
+        menubar: false,
+        images_upload_handler: (blobInfo, success, failure) => {
+          success('data:image/jpeg;base64,' + blobInfo.base64())
+        }
+      }
     }
   },
   computed: {
@@ -257,62 +265,11 @@ export default {
       this.visible = true
       this.mdl = { ...record }
     },
-    handleOk () {
-      const form = this.$refs.createModal.form
-      this.confirmLoading = true
-      form.validateFields((errors, values) => {
-        if (!errors) {
-          console.log('values', values)
-          if (values.id > 0) {
-            // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('修改成功')
-            })
-          } else {
-            // 新增
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('新增成功')
-            })
-          }
-        } else {
-          this.confirmLoading = false
-        }
-      })
-    },
     handleCancel () {
       this.visible = false
 
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
-    },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
@@ -353,5 +310,12 @@ export default {
 .inline-input{
   display: inline-block;
   width: 100px;
+}
+::v-deep .tox .tox-notifications-container .tox-notification {
+  display: none;
+}
+.tox-notifications-container{
+  height: 0;
+  width: 0;
 }
 </style>

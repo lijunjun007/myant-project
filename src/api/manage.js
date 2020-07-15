@@ -8,7 +8,8 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   //
-  getceshitaocan: '/getceshitaocan'
+  getceshitaocan: '/getceshitaocan',
+  getceshirenyuan: '/getceshirenyuan'
 
 }
 

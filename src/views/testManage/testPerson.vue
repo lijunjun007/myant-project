@@ -17,10 +17,10 @@
             </a-select>
           </a-col>
           <a-col >
-            <a-range-picker @change="onChange"></a-range-picker>
+            <a-range-picker @change="onChange" :placeholder="['开始时间','结束时间']"></a-range-picker>
           </a-col>
           <a-col >
-            <a-input-search placeholder="input search text" @search="onSearch">
+            <a-input-search placeholder="姓名/电话" @search="onSearch">
               <a-button type="primary" icon="search" slot="enterButton">
                 搜索
               </a-button>
@@ -30,14 +30,13 @@
         <s-table
           ref="table"
           size="default"
-          rowKey="key"
+          rowKey="xuhao"
           :columns="columns"
           :data="loadData"
           :alert="true"
           :rowSelection="rowSelection"
-          showPagination="auto"
+          :showPagination="false"
         >
-
         </s-table>
       </a-card>
     </page-header-wrapper>
@@ -46,6 +45,7 @@
 
 <script>
 import { STable } from '@/components'
+import api from '@/api/manage'
   export default {
     created () {
     },
@@ -88,21 +88,15 @@ import { STable } from '@/components'
     dataIndex: 'ceshijilu'
   }
         ],
+        queryParam: {},
         selectedRowKeys: [],
-        loadData: () => {
-        var ss = setTimeout(function () {
-          return {
-          xuhao: '1',
-          xingming: '李军',
-          nicheng: 'lijun',
-          xingbie: '男',
-          shoujihao: 123456,
-          dizhi: '重庆',
-          shoucanshijian: '2020/7/12',
-          ceshijilu: 'ssssss'
-        }
-        }, 200)
-        return ss
+        loadData: parameter => {
+        const requestParameters = Object.assign({}, parameter, this.queryParam)
+        console.log('loadData request parameters:', requestParameters)
+        return this.$http(api.getceshirenyuan, 'get', requestParameters)
+          .then(res => {
+            return res.result
+          })
       }
       }
     },
@@ -127,4 +121,13 @@ import { STable } from '@/components'
 
 </script>
 <style scoped>
+span.ant-input-group{
+  width: 80%;
+}
+button.ant-btn{
+  padding: 0 5px;
+}
+.ant-btn > .anticon + span{
+  margin-left: 0;
+}
 </style>
