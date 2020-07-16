@@ -21,10 +21,11 @@ import './core/lazy_use'
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
+import echarts from 'echarts'
 import { FormModel } from 'ant-design-vue'
 Vue.use(FormModel)
 Vue.config.productionTip = false
-
+Vue.prototype.$echarts = echarts
 // mount axios to `Vue.$http` and `this.$http`
 // Vue.use(axios)
 

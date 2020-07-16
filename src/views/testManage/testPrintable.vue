@@ -8,9 +8,8 @@
             size="default"
             rowKey="key"
             :columns="columns1"
-            :dataSource="[]"
+            :data="loadData"
             :alert="false"
-            :rowSelection="rowSelection"
             showPagination="auto"
           >
           </s-table>
@@ -21,32 +20,31 @@
             size="default"
             rowKey="key"
             :columns="columns2"
-            :dataSource="[]"
+            :data="loadData"
             :alert="false"
-            :rowSelection="rowSelection"
             showPagination="auto"
           >
           </s-table>
         </a-tab-pane>
         <template slot="tabBarExtraContent">
           <div>
-            <a-select :default-value="provinceData[0]" style="width: 120px" @change="handleProvinceChange">
+            <a-select :default-value="provinceData[0]" v-model="city1" style="width: 120px" @change="handleProvinceChange">
               <a-select-option v-for="province in provinceData" :key="province">
                 {{ province }}
               </a-select-option>
             </a-select>
-            <a-select v-model="secondCity" style="width: 120px">
-              <a-select-option v-for="city in cities" :key="city">
+            <a-select v-model="city2" style="width: 120px">
+              <a-select-option v-for="city in cityData" :key="city">
                 {{ city }}
               </a-select-option>
             </a-select>
-            <a-select v-show="tabChangeboo" v-model="secondCity" style="width: 120px">
-              <a-select-option v-for="city in cities" :key="city">
+            <a-select v-show="tabChangeboo" v-model="city3" style="width: 120px">
+              <a-select-option v-for="city in qu" :key="city">
                 {{ city }}
               </a-select-option>
             </a-select>
-            <a-range-picker :style="{width:'180px'}" @change="onChange"></a-range-picker>
-            <a-input placeholder="Basic usage" :style="{width:'100px'}"/>
+            <a-range-picker :style="{width:'200px'}" @change="onChange" :placeholder="['开始时间','结束时间']"></a-range-picker>
+            <a-input placeholder="姓名/电话" :style="{width:'100px'}"/>
             <a-button-group>
               <a-button icon="search" type="primary"> 搜索</a-button>
               <a-button v-show="tabChangeboo" icon="file-search" type="primary"> 高级</a-button>
@@ -61,11 +59,10 @@
 
 <script>
 import { STable } from '@/components'
-const provinceData = ['Zhejiang', 'Jiangsu']
-const cityData = {
-  Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
-  Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang']
-}
+import api from '@/api/manage'
+const provinceData = ['全部测评机构', '测试商户1', '测试商户2']
+const cityData = ['全部测评方案', '测评方案1', '测评方案2']
+const qu = ['全部量表', '量表1', '量表2']
 export default {
 	created () {
 		},
@@ -77,8 +74,10 @@ export default {
 		// 级联下拉选择框
 		provinceData,
 		cityData,
-		cities: cityData[provinceData[0]],
-		secondCity: cityData[provinceData[0]][0],
+		qu,
+		city1: provinceData[0],
+		city2: cityData[0],
+		city3: qu[0],
 		tabChangeboo: true,
 		columns1: [
 					{
@@ -87,23 +86,31 @@ export default {
 			},
 			{
 				title: '测评机构',
-				dataIndex: 'xingming'
+				dataIndex: 'jigou'
 			},
 			{
 				title: '测评方案',
-				dataIndex: 'nicheng'
+				dataIndex: 'fangan'
 			},
 			{
 				title: '参测人员',
-				dataIndex: 'xingbie'
+				dataIndex: 'testuser'
 			},
 			{
 				title: '性别',
-				dataIndex: 'shoujihao'
+				dataIndex: 'xingbie'
+			},
+			{
+				title: '结果评级',
+				dataIndex: 'grade'
+			},
+			{
+				title: '测试时间',
+				dataIndex: 'time'
 			},
 			{
 				title: '操作',
-				dataIndex: 'dizhi'
+				dataIndex: 'action'
 			}
 		],
 		columns2: [
@@ -113,28 +120,43 @@ export default {
 			},
 			{
 				title: '测评机构',
-				dataIndex: 'xingming'
+				dataIndex: 'jigou'
 			},
 			{
 				title: '测评方案',
-				dataIndex: 'nicheng'
+				dataIndex: 'fangan'
 			},
 			{
 				title: '参测人员',
-				dataIndex: 'xingbie'
+				dataIndex: 'testuser'
 			},
 			{
 				title: '性别',
-				dataIndex: 'shoujihao'
+				dataIndex: 'xingbie'
+			},
+			{
+				title: '结果评级',
+				dataIndex: 'grade'
+			},
+			{
+				title: '测试时间',
+				dataIndex: 'time'
 			},
 			{
 				title: '操作',
-				dataIndex: 'dizhi'
+				dataIndex: 'action'
 			}
-        ]
+		],
+		loadData: parameter => {
+        const requestParameters = Object.assign({}, parameter, this.queryParam)
+        console.log('loadData request parameters:', requestParameters)
+        return this.$http(api.getceshiresult, 'get', requestParameters)
+          .then(res => {
+            return res.result
+          })
+      }
 		}
 	},
-
 	methods: {
 		handleProvinceChange (value) {
       this.cities = cityData[value]

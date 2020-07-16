@@ -9,8 +9,9 @@ const api = {
   orgTree: '/org/tree',
   //
   getceshitaocan: '/getceshitaocan',
-  getceshirenyuan: '/getceshirenyuan'
-
+  getceshirenyuan: '/getceshirenyuan',
+  getceshiresult: '/getceshiresult',
+  getceshicode: '/getceshicode'
 }
 
 export default api

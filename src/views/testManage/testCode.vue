@@ -2,18 +2,18 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div style="padding-bottom:15px">
-        <a-select :default-value="provinceData[0]" style="width: 120px" @change="handleProvinceChange">
+        <a-select :default-value="provinceData[0]" style="width: 120px">
           <a-select-option v-for="province in provinceData" :key="province">
             {{ province }}
           </a-select-option>
         </a-select>
-        <a-select v-model="secondCity" style="width: 120px">
-          <a-select-option v-for="city in cities" :key="city">
+        <a-select v-model="cityData[0]" style="width: 120px">
+          <a-select-option v-for="city in cityData" :key="city">
             {{ city }}
           </a-select-option>
         </a-select>
-        <a-select v-model="secondCity" style="width: 120px">
-          <a-select-option v-for="city in cities" :key="city">
+        <a-select v-model="qu[0]" style="width: 120px">
+          <a-select-option v-for="city in qu" :key="city">
             {{ city }}
           </a-select-option>
         </a-select>
@@ -29,14 +29,12 @@
       <s-table
         ref="table"
         size="default"
-        rowKey="key"
         :columns="columns"
         :data="loadData"
         :alert="false"
-        :rowSelection="rowSelection"
         showPagination="auto"
       >
-        <span slot="serial" slot-scope="text, record, index">
+        <!-- <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
         <span slot="status" slot-scope="text">
@@ -52,232 +50,123 @@
             <a-divider type="vertical" />
             <a @click="handleSub(record)">订阅报警</a>
           </template>
-        </span>
+        </span> -->
       </s-table>
-
-      <create-form
-        ref="createModal"
-        :visible="visible"
-        :loading="confirmLoading"
-        :model="mdl"
-        @cancel="handleCancel"
-        @ok="handleOk"
-      />
-      <!-- <step-by-step-modal ref="modal" @ok="handleOk"/> -->
     </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
-import moment from 'moment'
-import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
-
-// import StepByStepModal from '../list/modules/StepByStepModal'
-import CreateForm from '../list/modules/CreateForm'
+import { STable } from '@/components'
+import api from '@/api/manage'
 
 const columns = [
   {
     title: '序号',
-    dataIndex: 'no'
+    dataIndex: 'xuhao'
   },
   {
-    title: '测评机构',
-    dataIndex: 'description',
+    title: '测试码',
+    dataIndex: 'ceshima',
     scopedSlots: { customRender: 'description' }
   },
   {
-    title: '方案名称',
-    dataIndex: 'callNo',
+    title: '打印备注',
+    dataIndex: 'beizhu',
     needTotal: true,
     customRender: (text) => text + ' 次'
   },
   {
-    title: '方案备注',
-    dataIndex: 'status',
+    title: '打印时间',
+    dataIndex: 'printtime',
     scopedSlots: { customRender: 'status' }
   },
   {
-    title: '收费',
-    dataIndex: 'updatedAt'
+    title: '领用人',
+    dataIndex: 'lingyongren'
   }, {
-    title: '审核人',
-    dataIndex: 'updatedAt2'
+    title: '领用日期',
+    dataIndex: 'lingyongdate'
   },
   {
-    title: '未完测评',
-    dataIndex: 'updatedAt3'
+    title: '使用人',
+    dataIndex: 'user'
   },
   {
-    title: '完成测评',
-    dataIndex: 'updatedAt4'
+    title: '使用人昵称',
+    dataIndex: 'usernick'
+  },
+  {
+    title: '使用日期',
+    dataIndex: 'usedate'
+  },
+  {
+    title: '状态',
+    dataIndex: 'status'
   },
   {
     title: '操作',
-    dataIndex: 'action',
-    width: '150px',
-    scopedSlots: { customRender: 'action' }
+    dataIndex: 'action'
   }
 ]
-
-const statusMap = {
-  0: {
-    status: 'default',
-    text: '关闭'
-  },
-  1: {
-    status: 'processing',
-    text: '运行中'
-  },
-  2: {
-    status: 'success',
-    text: '已上线'
-  },
-  3: {
-    status: 'error',
-    text: '异常'
-  }
-}
-const provinceData = ['Zhejiang', 'Jiangsu']
-const cityData = {
-  Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
-  Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang']
-}
+const provinceData = ['使用状态', '未使用', '已使用', '已作废']
+const cityData = ['领用状态', '未领用', '已领用']
+const qu = ['全部领用人']
 export default {
   name: 'TableList',
   components: {
-    STable,
-    Ellipsis,
-    CreateForm
-    // StepByStepModal
+    STable
   },
   data () {
-    this.columns = columns
     return {
       provinceData,
       cityData,
-      cities: cityData[provinceData[0]],
-		secondCity: cityData[provinceData[0]][0],
-      // create model
-      visible: false,
-      confirmLoading: false,
-      mdl: null,
+      qu,
+      columns,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        list1: null,
+        list2: null,
+        list3: null,
+        list4: null,
+        list5: null
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
+        return this.$http(api.getceshicode, 'get', requestParameters)
           .then(res => {
             return res.result
           })
-      },
-      selectedRowKeys: [],
-      selectedRows: []
-    }
-  },
-  filters: {
-    statusFilter (type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter (type) {
-      return statusMap[type].status
-    }
-  },
-  created () {
-    getRoleList({ t: new Date() })
-  },
-  computed: {
-    rowSelection () {
-      return {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
       }
     }
   },
+  // filters: {
+  //   statusFilter (type) {
+  //     return statusMap[type].text
+  //   },
+  //   statusTypeFilter (type) {
+  //     return statusMap[type].status
+  //   }
+  // },
+  // created () {
+  //   getRoleList({ t: new Date() })
+  // },
+  // computed: {
+  //   rowSelection () {
+  //     return {
+  //       selectedRowKeys: this.selectedRowKeys,
+  //       onChange: this.onSelectChange
+  //     }
+  //   }
+  // },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
-    },
-    handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
-    },
-    handleOk () {
-      const form = this.$refs.createModal.form
-      this.confirmLoading = true
-      form.validateFields((errors, values) => {
-        if (!errors) {
-          console.log('values', values)
-          if (values.id > 0) {
-            // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('修改成功')
-            })
-          } else {
-            // 新增
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('新增成功')
-            })
-          }
-        } else {
-          this.confirmLoading = false
-        }
-      })
-    },
-    handleCancel () {
-      this.visible = false
-
-      const form = this.$refs.createModal.form
-      form.resetFields() // 清理表单数据（可不做）
-    },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
-    },
-    handleProvinceChange (value) {
-      this.cities = cityData[value]
-      this.secondCity = cityData[value][0]
-	},
-		onChange () {},
-    handleChange () {},
-    onSearch () {}
+  //   handleProvinceChange (value) {
+  //     this.cities = cityData[value]
+  //     this.secondCity = cityData[value][0]
+	// },
+		onChange () {}
   }
 }
 </script>

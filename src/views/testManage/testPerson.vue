@@ -4,7 +4,7 @@
       <a-card>
         <a-row type="flex" :gutter="16" :style="{'padding-bottom':'16px'}" >
           <a-col >
-            <a-select default-value="全部性别" style="width:120px" @change="handleChange">
+            <a-select default-value="全部性别" style="width:100px" @change="handleChange">
               <a-select-option value="全部性别">
                 全部性别
               </a-select-option>
@@ -16,8 +16,8 @@
               </a-select-option>
             </a-select>
           </a-col>
-          <a-col >
-            <a-range-picker @change="onChange" :placeholder="['开始时间','结束时间']"></a-range-picker>
+          <a-col>
+            <a-range-picker style="width:200px" @change="onChange" :placeholder="['开始时间','结束时间']"></a-range-picker>
           </a-col>
           <a-col >
             <a-input-search placeholder="姓名/电话" @search="onSearch">
@@ -33,7 +33,6 @@
           rowKey="xuhao"
           :columns="columns"
           :data="loadData"
-          :alert="true"
           :rowSelection="rowSelection"
           :showPagination="false"
         >
