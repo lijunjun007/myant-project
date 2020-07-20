@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <page-header-wrapper>
     <a-row :gutter="[8,8]">
       <a-col :span="12" :xs="24" :xl="12">
         <!-- <div id="echartsdiv1" style="height:500px">
@@ -18,7 +18,7 @@
         <echart id="echartsdiv4" :data="option2" style="height:500px"></echart>
       </a-col>
     </a-row>
-  </div>
+  </page-header-wrapper>
 </template>
 
 <script>
@@ -39,13 +39,37 @@ return {
         type: 'category',
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
           },
-          yAxis: {
+        yAxis: {
               type: 'value'
           },
-          series: [{
+        series: [{
               data: [820, 932, 901, 934, 1290, 1330, 1320],
               type: 'line'
-          }]
+          }],
+        toolbox: { // 可视化的工具箱
+                show: true,
+                orient: 'vertical',
+                showTitle: false,
+                feature: {
+                    dataView: { // 数据视图
+                        show: true,
+                        title: '数据视图'
+                    },
+                    restore: { // 重置
+                        show: true,
+                        title: '刷新'
+                    },
+                    dataZoom: { // 数据缩放视图
+                        show: true,
+                        title: '缩放'
+                    },
+                    saveAsImage: {// 保存图片
+                        show: true,
+                        title: '保存图片',
+                        type: 'png'
+                    }
+                }
+            }
         },
   option2: {
         title: {
@@ -85,7 +109,31 @@ return {
                 barWidth: '60%',
                 data: [10, 52, 200, 334, 390, 330, 220]
             }
-        ]
+        ],
+        toolbox: { // 可视化的工具箱
+                show: true,
+                orient: 'vertical',
+                showTitle: false,
+                feature: {
+                    dataView: { // 数据视图
+                        show: true,
+                        title: '数据视图'
+                    },
+                    restore: { // 重置
+                        show: true,
+                        title: '刷新'
+                    },
+                    dataZoom: { // 数据缩放视图
+                        show: true,
+                        title: '缩放'
+                    },
+                    saveAsImage: {// 保存图片
+                        show: true,
+                        title: '保存图片',
+                        type: 'png'
+                    }
+                }
+            }
         }
 
 }

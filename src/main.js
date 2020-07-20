@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import i18n from './locales'
-// import axios from './utils/request'
+import { VueAxios } from './utils/request'
 import { http } from '@/api/http'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
@@ -27,7 +27,7 @@ Vue.use(FormModel)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 // mount axios to `Vue.$http` and `this.$http`
-// Vue.use(axios)
+Vue.use(VueAxios)
 
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-header-wrapper', PageHeaderWrapper)

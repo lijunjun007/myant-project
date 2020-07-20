@@ -170,6 +170,7 @@ export default {
       this.customActiveKey = key
       // this.form.resetFields()
     },
+     // 表单提交的按钮触发提交函数
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -182,7 +183,7 @@ export default {
       state.loginBtn = true
 
       const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
+    //   validateFields  表单提交按钮触发，value：{mobile: "18983848750", captcha: "sads"}...
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           console.log('login form', values)

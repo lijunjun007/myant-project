@@ -17,11 +17,11 @@
             {{ city }}
           </a-select-option>
         </a-select>
-        <a-range-picker :style="{width:'210px'}" @change="onChange"></a-range-picker>
+        <a-range-picker :style="{width:'210px'}" @change="onChange" :placeholder="['开始时间','结束时间']"></a-range-picker>
         <a-input placeholder="名字/电话" :style="{width:'110px'}"/>
         <a-button-group>
           <a-button icon="search" type="primary"> 搜索</a-button>
-          <a-button icon="printer" type="primary"> 打印</a-button>
+          <a-button icon="printer" type="primary" @click="()=>{modalShow1=true}"> 打印</a-button>
           <a-button icon="delete" type="primary"> 作废</a-button>
         </a-button-group>
       </div>
@@ -53,6 +53,35 @@
         </span> -->
       </s-table>
     </a-card>
+    <a-modal
+      title="打印"
+      :visible="modalShow1"
+      :footer="null"
+      width="45%"
+      @cancel="modalShow1=false"
+    >
+      <div>
+        <a-form>
+          <a-form-item label="打印备注" class="clean-f-mri">
+            <a-input placeholder="请输入本次打印备注 如：XXX体检方案" />
+          </a-form-item>
+          <a-form-item label="打印数量" class="clean-f-mri">
+            <a-input-number :defaultValue="30" />
+          </a-form-item>
+          <a-form-item label="打印二维码（表示是否打印二维码图片）" class="clean-f-mri">
+            <a-checkbox>
+            </a-checkbox>
+          </a-form-item>
+          <a-form-item label="是否包含打印以往已经打印且未使用的测试码（不建议勾选）" class="clean-f-mri">
+            <a-checkbox>
+            </a-checkbox>
+          </a-form-item>
+          <a-button type="primary">
+            确认
+          </a-button>
+        </a-form>
+      </div>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
@@ -139,7 +168,8 @@ export default {
           .then(res => {
             return res.result
           })
-      }
+      },
+		modalShow1: false
     }
   },
   // filters: {

@@ -47,12 +47,88 @@
             <a-input placeholder="姓名/电话" :style="{width:'100px'}"/>
             <a-button-group>
               <a-button icon="search" type="primary"> 搜索</a-button>
-              <a-button v-show="tabChangeboo" icon="file-search" type="primary"> 高级</a-button>
+              <a-button v-show="tabChangeboo" icon="file-search" type="primary" @click="()=>{modalShow1=true}"> 高级</a-button>
               <a-button v-show="tabChangeboo" icon="download" type="danger"> 导出</a-button>
             </a-button-group>
           </div>
         </template>
       </a-tabs>
+      <a-modal
+        title="高级"
+        :visible="modalShow1"
+        :footer="null"
+        width="45%"
+        @cancel="modalShow1=false"
+        class="modal1"
+      >
+        <div class="modalcontentform">
+          <a-tabs type="card" @change="callback2">
+            <a-tab-pane key="1" tab="基础信息" class="tab-panediv1">
+              <a-form>
+                <a-form-item label="测评机构" class="clean-f-mri">
+                  <a-select default-value="1">
+                    <a-select-option value="1">
+                      测试商户（曾）
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+                <a-form-item label="测评方案" class="clean-f-mri">
+                  <a-select default-value="1">
+                    <a-select-option value="1">
+                      测评方案
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+                <a-form-item label="量表" class="clean-f-mri">
+                  <a-select default-value="1">
+                    <a-select-option value="1">
+                      量表
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+                <a-form-item label="结果" class="clean-f-mri">
+                  <a-select default-value="1">
+                    <a-select-option value="1">
+                      结果
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+                <a-form-item label="测评时间" class="clean-f-mri">
+                  <a-range-picker class="datepick" :placeholder="['开始时间','结束时间']"></a-range-picker>
+                </a-form-item>
+                <a-form-item label="姓名/电话" class="clean-f-mri">
+                  <a-input placeholder="姓名/电话"/>
+                </a-form-item>
+                <a-form-item label="导出选项" class="clean-f-mri">
+                  <a-checkbox @change="checkto">
+                    结果横向输出
+                  </a-checkbox>
+                  <br>
+                  <a-checkbox style="padding-left:5px" :indeterminate="c2" :disabled="checkboxBoo" >
+                    因子维度结果输出
+                  </a-checkbox>
+                  <div style="color:red" >
+                    注: 横向输出结果时,按最近一次完成结果输出
+                  </div>
+                </a-form-item>
+              </a-form>
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="一般资料">
+              <div style="min-height:400px">
+                请选择测评方案
+              </div>
+            </a-tab-pane>
+          </a-tabs>
+          <div class="modal-btn1">
+            <a-button type="danger" icon="search">
+              搜索
+            </a-button>
+            <a-button type="primary" icon="download" style="margin-left:20px">
+              导出
+            </a-button>
+          </div>
+        </div>
+      </a-modal>
     </page-header-wrapper>
   </div>
 </template>
@@ -154,7 +230,11 @@ export default {
           .then(res => {
             return res.result
           })
-      }
+	},
+		// c1: false,
+		c2: false,
+		modalShow1: false,
+		checkboxBoo: true
 		}
 	},
 	methods: {
@@ -165,10 +245,35 @@ export default {
 		onChange () {},
 		callback () {
 			this.tabChangeboo = !this.tabChangeboo
+		},
+		callback2 () {},
+		checkto (e) {
+			if (e.target.checked) {
+				this.checkboxBoo = false
+			} else {
+				this.c2 = false
+				this.checkboxBoo = true
+			}
 		}
 	}
 }
 
 </script>
 <style scoped>
+.modal1 .modalcontentform{
+	position: relative;
+	padding-bottom:50px ;
+}
+.modal1 .modalcontentform>.modal-btn1{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+.tab-panediv1{
+	height:400px;
+	overflow-y:scroll;
+}
+.tab-panediv1::-webkit-scrollbar {
+        display: none;/*隐藏滚动条*/
+	}
 </style>

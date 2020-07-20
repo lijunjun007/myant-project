@@ -3,27 +3,25 @@
     <page-header-wrapper title="测试入口">
       <a-card :bordered="false">
         <div class="table-page-search-wrapper">
-          <a-form layout="inline" :style="{'padding-bottom':'10px'}">
-            <a-row :gutter="[16,16]">
-              <a-col :sm="{ span:24}" :md="{ span:6,offset:12}">
-                <a-select default-value="0" style="width: 100%" @change="handleChange">
-                  <a-select-option value="0">
-                    全部
-                  </a-select-option>
-                  <a-select-option value="1">
-                    测试商户(某某某)
-                  </a-select-option>
-                </a-select>
-              </a-col>
-              <a-col :sm="{ span:24}" :md="{ span:6}">
-                <a-input-search v-model="queryParam.str" placeholder="输入关键字" @search="onSearch">
-                  <a-button type="primary" icon="search" slot="enterButton">
-                    搜索
-                  </a-button>
-                </a-input-search>
-              </a-col>
-            </a-row>
-          </a-form>
+          <a-row type="flex" justify="end" :gutter="8" style="padding-bottom:20px">
+            <a-col>
+              <a-select default-value="0" style="width:150px" @change="handleChange">
+                <a-select-option value="0">
+                  全部
+                </a-select-option>
+                <a-select-option value="1">
+                  测试商户(某某某)
+                </a-select-option>
+              </a-select>
+            </a-col>
+            <a-col>
+              <a-input-search v-model="queryParam.str" placeholder="输入关键字" @search="onSearch" style="width:240px">
+                <a-button type="primary" icon="search" slot="enterButton">
+                  搜索
+                </a-button>
+              </a-input-search>
+            </a-col>
+          </a-row>
         </div>
 
         <s-table
@@ -138,17 +136,12 @@
         >
           <a-row>
             <a-col :span="12">
-              <p>1、手机扫码进入测试</p>
-              img<br>
-              img<br>
-              img<br>
-              img<br>
-              img<br>
-              img<br>
+              <p>1、手机扫码进入测</p>
+              <vue-qr :logoSrc="imgUrl" text="https://c-ssl.duitang.com/uploads/blog/201410/30/20141030222429_NCtdc.jpeg" :size="200"></vue-qr>
             </a-col>
             <a-col :span="12">
               <p>2、电脑点击进入测试</p>
-              <a-textarea defaultValue="http://devxl.suqiao.net/home/wx/checklogin?redirect_url=/home/wenjuan/fenzu/id/918/mid/287" :rows="6" :readOnly="true"></a-textarea>
+              <a-textarea defaultValue="https://c-ssl.duitang.com/uploads/blog/201410/30/20141030222429_NCtdc.jpeg" :rows="6" :readOnly="true"></a-textarea>
             </a-col>
           </a-row>
         </a-modal>
@@ -219,6 +212,7 @@ import api from '@/api/manage'
 // import StepByStepModal from '../list/modules/StepByStepModal'
 
 import Editor from '@tinymce/tinymce-vue'
+import vueQr from 'vue-qr'
 
 const columns = [
   {
@@ -281,13 +275,15 @@ export default {
   name: 'TableList',
   components: {
     STable,
-    Editor
+    Editor,
+    vueQr
     // StepByStepModal
   },
   mounted () {
   },
   data () {
     return {
+      imgUrl: require('../../assets/icons/head_icon.png'),
       // 查询参数
       queryParam: {},
       // 加载数据方法 必须为 Promise 对象
@@ -320,10 +316,7 @@ export default {
           'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent  | undo redo | link unlink image  | removeformat ',
         branding: false,
         min_height: 300,
-        menubar: false,
-        images_upload_handler: (blobInfo, success, failure) => {
-          success('data:image/jpeg;base64,' + blobInfo.base64())
-        }
+        menubar: false
       },
       valueKey: [
       '',

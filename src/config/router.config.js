@@ -96,8 +96,18 @@ export const asyncRouterMap = [
             path: '/scaleTable',
             name: 'scaleTable',
             component: () => import('@/views/evaluationStatistics/scaleTable'),
-            meta: { title: '量表统计', keepAlive: false, permission: [ 'testStatistics' ] }
+            meta: {
+              title: '量表统计', keepAlive: false, permission: ['testStatistics']
+            }
           }
+          // {
+          //   path: '/viewliangbiao',
+          //   name: 'viewliangbiao',
+          //   component: () => import('@/views/evaluationStatistics/liangbiao-view'),
+          //   meta: {
+          //     title: '量表查看', keepAlive: false
+          //   }
+          //   }
         ]
       },
       // 个人信息
@@ -160,7 +170,7 @@ export const asyncRouterMap = [
           },
           // 外部链接
           {
-            path: 'https://www.baidu.com/',
+            path: 'http://devxl.suqiao.net/merchant/bulletin/board?_ck_=36513913fc4ed04c7753ee0babb38515',
             name: 'Monitor',
             meta: { title: 'menu.dashboard.monitor', target: '_blank' }
           },
