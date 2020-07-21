@@ -136,8 +136,8 @@
         >
           <a-row>
             <a-col :span="12">
-              <p>1、手机扫码进入测</p>
-              <vue-qr :logoSrc="imgUrl" text="https://c-ssl.duitang.com/uploads/blog/201410/30/20141030222429_NCtdc.jpeg" :size="200"></vue-qr>
+              <p>1、手机扫码进入测试</p>
+              <vue-qr :logoSrc="imgUrl" style="width:60%;padding-left:20px" text="https://c-ssl.duitang.com/uploads/blog/201410/30/20141030222429_NCtdc.jpeg" :size="200"></vue-qr>
             </a-col>
             <a-col :span="12">
               <p>2、电脑点击进入测试</p>
@@ -212,8 +212,6 @@ import api from '@/api/manage'
 // import StepByStepModal from '../list/modules/StepByStepModal'
 
 import Editor from '@tinymce/tinymce-vue'
-import vueQr from 'vue-qr'
-
 const columns = [
   {
     title: '序号',
@@ -275,8 +273,7 @@ export default {
   name: 'TableList',
   components: {
     STable,
-    Editor,
-    vueQr
+    Editor
     // StepByStepModal
   },
   mounted () {
@@ -464,7 +461,8 @@ export default {
     yulan (record) {
       this.singledata = record
       this.modalShow3 = true
-    }
+    },
+    jieguo () {}
   }
 }
 </script>

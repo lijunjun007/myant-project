@@ -6,7 +6,7 @@ const RouteView = {
   name: 'RouteView',
   render: (h) => h('router-view')
 }
-
+// asyncRouterMap  动态的全部路由，后台获取到的路由，进行权限过滤
 export const asyncRouterMap = [
   {
             path: '/tinymce',
@@ -19,7 +19,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/test',
     children: [
       // 测试管理
       {

@@ -67,6 +67,7 @@ const permission = {
         const { roles } = data
         const accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         commit('SET_ROUTERS', accessedRouters)
+        // console.log('路由权限列表' + JSON.stringify(accessedRouters))
         resolve()
       })
     }

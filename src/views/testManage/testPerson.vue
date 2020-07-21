@@ -26,6 +26,10 @@
               </a-button>
             </a-input-search>
           </a-col>
+          <a-col >
+            <a-button v-action:update>update</a-button>
+            <a-button v-action:delete>delete</a-button>
+          </a-col>
         </a-row>
         <s-table
           ref="table"

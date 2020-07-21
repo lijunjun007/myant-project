@@ -16,11 +16,13 @@ const permission = {
     }
   },
   actions: {
+    // 动态生成菜单 （没用到）
     GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
         const { token } = data
         generatorDynamicRouter(token).then(routers => {
           commit('SET_ROUTERS', routers)
+          console.log('动态生成菜单' + routers)
           resolve()
         })
       })

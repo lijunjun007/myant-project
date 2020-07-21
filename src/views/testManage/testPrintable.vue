@@ -6,7 +6,7 @@
           <s-table
             ref="table"
             size="default"
-            rowKey="key"
+            rowKey="xuhao"
             :columns="columns1"
             :data="loadData"
             :alert="false"
@@ -18,7 +18,7 @@
           <s-table
             ref="table"
             size="default"
-            rowKey="key"
+            rowKey="xuhao"
             :columns="columns2"
             :data="loadData"
             :alert="false"

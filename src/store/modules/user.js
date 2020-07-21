@@ -40,6 +40,8 @@ const user = {
           const result = response.result
           storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', result.token)
+          storage.set('name', result.name, 7 * 24 * 60 * 60 * 1000)
+          storage.set('role', result.role, 7 * 24 * 60 * 60 * 1000)
           resolve()
         }).catch(error => {
           reject(error)
@@ -48,9 +50,12 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo ({ commit }) {
+    GetInfo ({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        var b = {}
+        b.name = storage.get('name')
+        b.role = storage.get('role')
+        getInfo(b).then(response => {
           const result = response.result
 
           if (result.role && result.role.permissions.length > 0) {
@@ -90,6 +95,9 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
+          storage.remove('name')
+          storage.remove('role')
+          window.history.go(-1)
         })
       })
     }
